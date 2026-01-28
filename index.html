@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indústria do Brasil - Gestão de Resíduos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- CAPA INICIAL -->
+    <div id="capa">
+        <div class="capa-box">
+            <h1>Bem-vindo ao site da Indústria do Brasil</h1>
+            <input type="text" id="nome" placeholder="Nome completo">
+            <input type="password" id="senha" placeholder="Senha">
+            <button id="entrar">Entrar no site</button>
+        </div>
+    </div>
+
+    <!-- PÁGINA PRINCIPAL -->
+    <div id="site" style="display:none;">
+
+        <header>
+            <h2>Fique à vontade, pode ler tudo que quiser</h2>
+        </header>
+
+        <!-- BOTÕES LATERAIS -->
+        <div class="botoes-area">
+            <button onclick="mostrarSecao('industria')">🌱 Indústria</button>
+            <button onclick="mostrarSecao('sistema')">⚙️ Sistema</button>
+            <button onclick="mostrarSecao('beneficios')">♻️ Benefícios</button>
+            <button onclick="mostrarSecao('config')">🛠️ Configuração</button>
+        </div>
+
+        <!-- QUADRO DE CONTEÚDO -->
+        <div id="conteudo-box">
+
+            <section id="industria" class="conteudo" style="display:none;">
+                <h3>Tudo sobre a Indústria</h3>
+                <p>
+                    A Indústria do Brasil atua com soluções modernas de limpeza urbana
+                    e gestão inteligente de resíduos, promovendo sustentabilidade,
+                    organização e qualidade de vida para as cidades.
+                </p>
+            </section>
+
+            <section id="sistema" class="conteudo" style="display:none;">
+                <h3>O Sistema</h3>
+                <p>
+                    O sistema integra tecnologia, controle de dados e gestão inteligente,
+                    permitindo cadastro de usuários, acompanhamento de coletas,
+                    geração de relatórios e apoio à tomada de decisões.
+                </p>
+            </section>
+
+            <section id="beneficios" class="conteudo" style="display:none;">
+                <h3>Benefícios</h3>
+                <ul>
+                    <li>Redução de custos operacionais</li>
+                    <li>Menos desperdício de combustível</li>
+                    <li>Melhoria da organização da coleta</li>
+                    <li>Redução da poluição</li>
+                    <li>Mais sustentabilidade ambiental</li>
+                </ul>
+            </section>
+
+            <section id="config" class="conteudo" style="display:none;">
+                <h3>Configuração</h3>
+                <p class="config-texto">
+                    Área responsável por personalizar a experiência do usuário,
+                    garantindo conforto visual, acessibilidade e adaptação às preferências.
+                </p>
+
+                <div class="config-botoes">
+                    <button onclick="alternarTema()">🌗 Modo Claro / Escuro</button>
+
+                    <div class="fonte-controle">
+                        <button onclick="alterarFonte(1)">＋</button>
+                        <span>Tamanho da Fonte</span>
+                        <button onclick="alterarFonte(-1)">－</button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
