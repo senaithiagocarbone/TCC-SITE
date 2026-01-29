@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <!-- CAPA INICIAL -->
+    <!-- ================== CAPA INICIAL ================== -->
     <div id="capa">
         <div class="capa-box">
             <h1>Bem-vindo ao site da Indústria do Brasil</h1>
@@ -18,25 +18,35 @@
         </div>
     </div>
 
-    <!-- PÁGINA PRINCIPAL -->
+    <!-- ================== PÁGINA PRINCIPAL ================== -->
     <div id="site" style="display:none;">
 
-        <header>
+        <!-- ================== TOPO COM RETÂNGULO ================== -->
+        <header class="topo-grande">
+            <div class="retangulo-topo"></div>
             <h2>Fique à vontade, pode ler tudo que quiser</h2>
         </header>
 
-        <!-- BOTÕES LATERAIS -->
-        <div class="botoes-area">
-            <button onclick="mostrarSecao('industria')">🌱 Indústria</button>
-            <button onclick="mostrarSecao('sistema')">⚙️ Sistema</button>
-            <button onclick="mostrarSecao('beneficios')">♻️ Benefícios</button>
-            <button onclick="mostrarSecao('config')">🛠️ Configuração</button>
+        <!-- ================== RETÂNGULO GRANDE ================== -->
+        <div class="botoes-retangulo">
+            <button>Área Informativa</button>
+            <span style="color:#ffffff; font-weight:bold; text-align:center; margin-top:10px;">
+                Gestão Inteligente de Resíduos ♻️
+            </span>
         </div>
 
-        <!-- QUADRO DE CONTEÚDO -->
+        <!-- ================== BOTÕES LATERAIS ================== -->
+        <div class="botoes-area">
+            <button onclick="mostrarSecao('industria')">Indústria</button>
+            <button onclick="mostrarSecao('sistema')">Sistema</button>
+            <button onclick="mostrarSecao('beneficios')">Benefícios</button>
+            <button onclick="mostrarSecao('config')">Configuração</button>
+        </div>
+
+        <!-- ================== CONTEÚDO CENTRAL ================== -->
         <div id="conteudo-box">
 
-            <section id="industria" class="conteudo" style="display:none;">
+            <section id="industria" class="conteudo">
                 <h3>Tudo sobre a Indústria</h3>
                 <p>
                     A Indústria do Brasil atua com soluções modernas de limpeza urbana
@@ -45,7 +55,7 @@
                 </p>
             </section>
 
-            <section id="sistema" class="conteudo" style="display:none;">
+            <section id="sistema" class="conteudo">
                 <h3>O Sistema</h3>
                 <p>
                     O sistema integra tecnologia, controle de dados e gestão inteligente,
@@ -54,7 +64,7 @@
                 </p>
             </section>
 
-            <section id="beneficios" class="conteudo" style="display:none;">
+            <section id="beneficios" class="conteudo">
                 <h3>Benefícios</h3>
                 <ul>
                     <li>Redução de custos operacionais</li>
@@ -65,26 +75,40 @@
                 </ul>
             </section>
 
-            <section id="config" class="conteudo" style="display:none;">
+            <section id="config" class="conteudo">
                 <h3>Configuração</h3>
                 <p class="config-texto">
-                    Área responsável por personalizar a experiência do usuário,
-                    garantindo conforto visual, acessibilidade e adaptação às preferências.
+                    Personalize sua experiência: ajuste cores, fontes e navegação.
                 </p>
 
                 <div class="config-botoes">
-                    <button onclick="alternarTema()">🌗 Modo Claro / Escuro</button>
+                    <button onclick="alternarTema()">Modo Claro / Escuro</button>
+
+                    <button onclick="mudarCorModoEscuro()">
+                        Mudar cor no modo escuro
+                    </button>
 
                     <div class="fonte-controle">
                         <button onclick="alterarFonte(1)">＋</button>
-                        <span>Tamanho da Fonte</span>
+                        <span style="font-weight:bold;">Fonte</span>
                         <button onclick="alterarFonte(-1)">－</button>
+                    </div>
+
+                    <div class="pagina-botoes">
+                        <button onclick="mostrarSecao('outraPagina')">Mudar Página</button>
+                        <button onclick="voltarLogin()">Voltar ao Login</button>
                     </div>
                 </div>
             </section>
 
-        </div>
+            <section id="outraPagina" class="conteudo">
+                <h3>Outra Página</h3>
+                <p>
+                    Esta é uma página extra de exemplo para navegação interna do sistema.
+                </p>
+            </section>
 
+        </div>
     </div>
 
     <script src="script.js"></script>
