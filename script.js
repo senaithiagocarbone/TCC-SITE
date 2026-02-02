@@ -89,4 +89,3 @@ function mudarCorModoEscuro() {
     if (topo) topo.classList.toggle("verde-claro");
     if (lateral) lateral.classList.toggle("verde-claro");
 }
-
