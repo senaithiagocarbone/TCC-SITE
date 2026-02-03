@@ -1,5 +1,11 @@
 // ================== VARIÁVEIS GLOBAIS ==================
-let tamanhoFonte = 18; // tamanho inicial da fonte
+let nivelFonte = 0;          // controle do tamanho da fonte (0 a 20)
+const maxNivel = 20;
+const tamanhoBase = 16;      // tamanho normal
+const passoFonte = 2;        // quanto cresce por clique
+
+let nivelBrilho = 0;
+const niveisBrilho = [40, 70, 110, 160]; // fraco → médio → forte → super
 
 // ================== LOGIN E BOAS-VINDAS ==================
 document.getElementById('entrar').addEventListener('click', function () {
@@ -16,31 +22,8 @@ document.getElementById('entrar').addEventListener('click', function () {
         return;
     }
 
-    // Esconde a capa e mostra o site
     document.getElementById('capa').style.display = 'none';
     document.getElementById('site').style.display = 'block';
-
-    // Mensagem de boas-vindas
-    const mensagem = document.createElement('div');
-    mensagem.id = 'mensagem-boas-vindas';
-    mensagem.innerText = `Fique à vontade, ${nome}! Leia tudo que quiser, o site é seu.`;
-    mensagem.style.position = 'fixed';
-    mensagem.style.top = '20px';
-    mensagem.style.left = '50%';
-    mensagem.style.transform = 'translateX(-50%)';
-    mensagem.style.background = '#2e7d32';
-    mensagem.style.color = '#fff';
-    mensagem.style.padding = '15px 30px';
-    mensagem.style.borderRadius = '12px';
-    mensagem.style.zIndex = '9999';
-    mensagem.style.transition = 'opacity 0.5s';
-
-    document.body.appendChild(mensagem);
-
-    setTimeout(() => {
-        mensagem.style.opacity = '0';
-        setTimeout(() => mensagem.remove(), 500);
-    }, 3000);
 });
 
 // ================== MOSTRAR SEÇÃO ==================
@@ -57,35 +40,93 @@ function mostrarSecao(id) {
 function voltarLogin() {
     document.getElementById('site').style.display = 'none';
     document.getElementById('capa').style.display = 'flex';
+    nivelBrilho = 0;
+    document.body.style.removeProperty('--brilho');
+    nivelFonte = 0;
+    aplicarFonte();
 }
 
 // ================== MODO CLARO / ESCURO ==================
 function alternarTema() {
     document.body.classList.toggle('escuro');
+    if (!document.body.classList.contains('escuro')) {
+        document.body.classList.remove('brilho-verde');
+        nivelBrilho = 0;
+        document.body.style.removeProperty('--brilho');
+    }
 }
 
-// ================== CONTROLE DE TAMANHO DA FONTE ==================
-function alterarFonte(delta) {
-    tamanhoFonte += delta;
+// ================== CONTROLE DE FONTE ==================
+function aumentarFonte() {
+    if (nivelFonte < maxNivel) {
+        nivelFonte++;
+        aplicarFonte();
+    }
+}
 
-    if (tamanhoFonte < 12) tamanhoFonte = 12;
-    if (tamanhoFonte > 40) tamanhoFonte = 40;
+function diminuirFonte() {
+    if (nivelFonte > 0) {
+        nivelFonte--;
+        aplicarFonte();
+    }
+}
 
-    document.querySelectorAll('.conteudo').forEach(conteudo => {
-        conteudo.style.fontSize = tamanhoFonte + 'px';
+function aplicarFonte() {
+    const novoTamanho = tamanhoBase + (nivelFonte * passoFonte);
+    document.querySelectorAll('.conteudo, body').forEach(el => {
+        el.style.fontSize = novoTamanho + 'px';
     });
 }
 
-// ================== MUDAR COR NO MODO ESCURO ==================
+// ================== BRILHO VERDE PROGRESSIVO ==================
 function mudarCorModoEscuro() {
-    if (!document.body.classList.contains("escuro")) {
+    if (!document.body.classList.contains('escuro')) {
         alert("Ative o modo escuro primeiro 🌙");
         return;
     }
+    document.body.classList.add('brilho-verde');
+    nivelBrilho++;
+    if (nivelBrilho >= niveisBrilho.length) {
+        nivelBrilho = 0;
+    }
+    document.body.style.setProperty('--brilho', niveisBrilho[nivelBrilho] + 'px');
+}
 
-    const topo = document.querySelector(".retangulo-topo");
-    const lateral = document.querySelector(".botoes-retangulo");
+// ================== MOSTRAR TEXTO DE VAGAR ==================
+function mostrarTexto(id) {
+    const elemento = document.getElementById(id);
 
-    if (topo) topo.classList.toggle("verde-claro");
-    if (lateral) lateral.classList.toggle("verde-claro");
+    if (!elemento) return;
+
+    // Se for uma lista (ul)
+    if (elemento.tagName.toLowerCase() === 'ul') {
+        const itens = Array.from(elemento.querySelectorAll('li'));
+        elemento.style.display = 'block';
+        itens.forEach(item => item.style.display = 'none');
+
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i >= itens.length) {
+                clearInterval(interval);
+                return;
+            }
+            itens[i].style.display = 'list-item';
+            i++;
+        }, 400); // intervalo de 400ms entre cada item
+    } 
+    // Se for parágrafo normal
+    else {
+        const texto = elemento.innerHTML;
+        elemento.innerHTML = '';
+        elemento.style.display = 'block';
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i >= texto.length) {
+                clearInterval(interval);
+                return;
+            }
+            elemento.innerHTML += texto.charAt(i);
+            i++;
+        }, 25); // 25ms por letra
+    }
 }

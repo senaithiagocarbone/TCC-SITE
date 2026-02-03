@@ -5,6 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indústria do Brasil - Gestão de Resíduos</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ================== ESTILOS BÁSICOS ================== */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .conteudo {
+            padding: 20px;
+        }
+        .texto-oculto {
+            display: none;
+            margin-top: 10px;
+            line-height: 1.5em;
+        }
+        .fonte-controle button {
+            font-size: 18px;
+            padding: 5px 10px;
+        }
+        .pagina-botoes button {
+            margin-right: 10px;
+        }
+        button {
+            cursor: pointer;
+        }
+        /* Estilo dos retângulos verdes */
+        .retangulo-botao {
+            background-color: #4CAF50;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            padding: 15px 0;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .retangulo-botao button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 28px;
+            font-weight: 800;
+        }
+        .retangulo-botao span {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #FFD700;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
 
@@ -21,35 +70,19 @@
     <!-- ================== PÁGINA PRINCIPAL ================== -->
     <div id="site" style="display:none;">
 
-   <header class="topo-grande" style="position:relative; top:-80px; left:0; width:100vw;">
-    <div class="retangulo-topo" style="
-        height:100px;
-        width:100%;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-    ">
-        <span style="
-            color:#ffffff;
-            font-weight:800;
-            font-size:30px;
-            text-align:center;
-            line-height:1.3;
-            text-shadow:2px 2px 6px rgba(0,0,0,0.6);
-            letter-spacing:1px;
-        ">
-            Fique à vontade, pode ler tudo que quiser
-        </span>
-    </div>
-</header>
+        <!-- ================== TOPO ================== -->
+        <header class="topo-grande" style="position:relative; top:-80px; width:100vw;">
+            <div class="retangulo-topo" style="height:100px; display:flex; align-items:center; justify-content:center;">
+                <span style="color:#fff; font-weight:800; font-size:30px; text-align:center;">
+                    Fique à vontade, pode ler tudo que quiser
+                </span>
+            </div>
+        </header>
 
-
-        <!-- ================== RETÂNGULO GRANDE ================== -->
+        <!-- ================== LATERAL ================== -->
         <div class="botoes-retangulo">
             <button>Área Informativa</button>
-            <span style="color:#ffffff; font-weight:bold; text-align:center; margin-top:10px;">
-                Gestão Inteligente de Resíduos ♻️
-            </span>
+            <span style="color:#fff; font-weight:bold;">Gestão Inteligente de Resíduos ♻️</span>
         </div>
 
         <!-- ================== BOTÕES LATERAIS ================== -->
@@ -63,27 +96,45 @@
         <!-- ================== CONTEÚDO CENTRAL ================== -->
         <div id="conteudo-box">
 
+            <!-- ================== INDÚSTRIA ================== -->
             <section id="industria" class="conteudo">
-                <h3>Tudo sobre a Indústria</h3>
-                <p>
+                <div class="retangulo-botao">
+                    <button onclick="mostrarTexto('industria-texto')">
+                        Tudo sobre a Indústria
+                        <span>Ler o texto completo!</span>
+                    </button>
+                </div>
+                <p id="industria-texto" class="texto-oculto">
                     A Indústria do Brasil atua com soluções modernas de limpeza urbana
                     e gestão inteligente de resíduos, promovendo sustentabilidade,
                     organização e qualidade de vida para as cidades.
                 </p>
             </section>
 
+            <!-- ================== SISTEMA ================== -->
             <section id="sistema" class="conteudo">
-                <h3>O Sistema</h3>
-                <p>
+                <div class="retangulo-botao">
+                    <button onclick="mostrarTexto('sistema-texto')">
+                        O Sistema
+                        <span>Clique e descubra como funciona!</span>
+                    </button>
+                </div>
+                <p id="sistema-texto" class="texto-oculto">
                     O sistema integra tecnologia, controle de dados e gestão inteligente,
                     permitindo cadastro de usuários, acompanhamento de coletas,
                     geração de relatórios e apoio à tomada de decisões.
                 </p>
             </section>
 
+            <!-- ================== BENEFÍCIOS ================== -->
             <section id="beneficios" class="conteudo">
-                <h3>Benefícios</h3>
-                <ul>
+                <div class="retangulo-botao">
+                    <button onclick="mostrarTexto('beneficios-texto')">
+                        Benefícios
+                        <span>Veja todas as vantagens!</span>
+                    </button>
+                </div>
+                <ul id="beneficios-texto" class="texto-oculto">
                     <li>Redução de custos operacionais</li>
                     <li>Menos desperdício de combustível</li>
                     <li>Melhoria da organização da coleta</li>
@@ -92,32 +143,36 @@
                 </ul>
             </section>
 
-            <section id="config" class="conteudo">
-                <h3>Configuração</h3>
-                <p class="config-texto">
-                    Personalize sua experiência: ajuste cores, fontes e navegação.
+            <!-- ================== CONFIGURAÇÃO ================== -->
+            <section id="config" class="conteudo destaque-config">
+                <div class="retangulo-botao">
+                    <button onclick="mostrarTexto('config-texto')">
+                        Configuração do Sistema
+                        <span>Personalize sua experiência!</span>
+                    </button>
+                </div>
+                <p id="config-texto" class="texto-oculto">
+                    Personalize sua experiência visual.<br>
+                    Ajuste tema, cores e tamanho da fonte.
                 </p>
 
                 <div class="config-botoes">
                     <button onclick="alternarTema()">Modo Claro / Escuro</button>
-
-                    <button onclick="mudarCorModoEscuro()">
-                        Mudar cor no modo escuro
-                    </button>
+                    <button onclick="mudarCorModoEscuro()">Brilho Verde</button>
 
                     <div class="fonte-controle">
-                        <button onclick="alterarFonte(1)">＋</button>
-                        <span style="font-weight:bold;">Fonte</span>
-                        <button onclick="alterarFonte(-1)">－</button>
+                        <button onclick="diminuirFonte()">−</button>
+                        <span id="nivelFonteTexto">0%</span>
+                        <button onclick="aumentarFonte()">+</button>
                     </div>
 
-                    <div class="pagina-botoes">
-                        <button onclick="mostrarSecao('outraPagina')">Mudar Página</button>
+                    <div class="pagina-botoes" style="margin-top:15px;">
                         <button onclick="voltarLogin()">Voltar ao Login</button>
                     </div>
                 </div>
             </section>
 
+            <!-- ================== OUTRA PÁGINA ================== -->
             <section id="outraPagina" class="conteudo">
                 <h3>Outra Página</h3>
                 <p>
