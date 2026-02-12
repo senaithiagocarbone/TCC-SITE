@@ -9,46 +9,43 @@ const niveisBrilho = [40, 70, 110, 160];
 
 let idiomaAtual = "pt";
 
-// Cadastros
-const pessoasCadastradas = [
-    { nome: "João Silva", data: "10/02/2026", hora: "09:30", leuTudo: true },
-    { nome: "Maria Souza", data: "10/02/2026", hora: "10:15", leuTudo: false },
-    { nome: "Thiago Carbone", data: "10/02/2026", hora: "11:00", leuTudo: true }
-];
-let backupCadastros = [];
-let cadastrosAntigos = [];
+/* ================== BANCO DE DADOS ================== */
+let banco = JSON.parse(localStorage.getItem("bancoUsuarios")) || [];
+let backupBanco = [];
 
 /* ================== LOGIN ================== */
 document.getElementById("entrar").addEventListener("click", () => {
+
     const nome = document.getElementById("nome").value.trim();
     const senha = document.getElementById("senha").value.trim();
 
     if (!nome) {
-        alert(traduzir("Por favor, digite seu nome!"));
+        alert("Por favor, digite seu nome!");
         return;
     }
 
     if (senha.toLowerCase() !== "plantas") {
-        alert(traduzir("Nome ou senha incorretos!"));
+        alert("Nome ou senha incorretos!");
         return;
     }
 
+    const agora = new Date();
+
+    const usuario = {
+        nome: nome,
+        data: agora.toLocaleDateString(),
+        hora: agora.toLocaleTimeString(),
+        leuTudo: true
+    };
+
+    banco.push(usuario);
+    localStorage.setItem("bancoUsuarios", JSON.stringify(banco));
+
     document.getElementById("capa").style.display = "none";
     document.getElementById("site").style.display = "block";
+
     mostrarSecao("industria");
 });
-
-/* ================== TRADUÇÃO DE ALERTAS ================== */
-function traduzir(texto) {
-    const traducoes = {
-        "Por favor, digite seu nome!": { en: "Please enter your name!", es: "¡Por favor, ingresa tu nombre!" },
-        "Nome ou senha incorretos!": { en: "Incorrect name or password!", es: "¡Nombre o contraseña incorrectos!" },
-        "Ative o modo escuro primeiro": { en: "Enable dark mode first", es: "Activa el modo oscuro primero" },
-        "Deseja apagar todos os cadastros?": { en: "Do you want to delete all records?", es: "¿Desea eliminar todos los registros?" },
-        "Nenhum cadastro para recuperar!": { en: "No records to recover!", es: "¡No hay registros para recuperar!" }
-    };
-    return traducoes[texto]?.[idiomaAtual] || texto;
-}
 
 /* ================== NAVEGAÇÃO ================== */
 function mostrarSecao(id) {
@@ -61,20 +58,13 @@ function mostrarSecao(id) {
 function voltarLogin() {
     document.getElementById("site").style.display = "none";
     document.getElementById("capa").style.display = "flex";
-
-    nivelFonte = 0;
-    nivelBrilho = 0;
-    aplicarFonteGlobal();
-
-    document.body.classList.remove("escuro", "brilho-verde");
-    document.body.style.removeProperty("--brilho");
 }
 
 /* ================== CONTROLE DE FONTE ================== */
 function aplicarFonteGlobal() {
     document.documentElement.style.fontSize = (tamanhoBase + nivelFonte) + "px";
     const indicador = document.getElementById("nivelFonteTexto");
-    if (indicador) indicador.innerText = nivelFonte + "%";
+    if (indicador) indicador.innerText = nivelFonte;
 }
 
 function aumentarFonte() {
@@ -94,29 +84,25 @@ function diminuirFonte() {
 /* ================== TEMA ================== */
 function alternarTema() {
     document.body.classList.toggle("escuro");
-    if (!document.body.classList.contains("escuro")) {
-        document.body.classList.remove("brilho-verde");
-        nivelBrilho = 0;
-        document.body.style.removeProperty("--brilho");
-    }
 }
 
 function mudarCorModoEscuro() {
     if (!document.body.classList.contains("escuro")) {
-        alert(traduzir("Ative o modo escuro primeiro"));
+        alert("Ative o modo escuro primeiro");
         return;
     }
-    document.body.classList.add("brilho-verde");
+
     nivelBrilho = (nivelBrilho + 1) % niveisBrilho.length;
     document.body.style.setProperty("--brilho", niveisBrilho[nivelBrilho] + "px");
 }
 
-/* ================== MOSTRAR TEXTO ================== */
+/* ================== MOSTRAR TEXTO COM EFEITO ================== */
 function mostrarTexto(id) {
     const elemento = document.getElementById(id);
     if (!elemento) return;
 
-    const texto = elemento.innerHTML;
+    const texto = elemento.dataset.original || elemento.innerHTML;
+    elemento.dataset.original = texto;
     elemento.innerHTML = "";
     elemento.style.display = "block";
 
@@ -128,132 +114,110 @@ function mostrarTexto(id) {
         }
         elemento.innerHTML += texto.charAt(i);
         i++;
-    }, 25);
+    }, 20);
 }
 
-/* ================== CADASTROS ================== */
+/* ================== MOSTRAR CADASTROS ================== */
 function mostrarCadastros() {
+
     const quadro = document.getElementById("quadro-cadastro");
     const lista = document.getElementById("lista-cadastros");
 
     quadro.classList.remove("oculto");
     lista.innerHTML = "";
 
-    if (pessoasCadastradas.length === 0) {
-        lista.innerHTML = `<div class="frase-parabens">Você tem que criar um cadastro na capa inicial</div>`;
+    if (banco.length === 0) {
+        lista.innerHTML = "Você ainda não tem cadastros.";
         return;
     }
 
-    pessoasCadastradas.forEach(pessoa => {
+    banco.forEach(pessoa => {
+
         const div = document.createElement("div");
-        div.className = "linha-caderno";
+        div.style.background = "#f4f4f4";
+        div.style.padding = "10px";
+        div.style.margin = "6px 0";
+        div.style.borderRadius = "8px";
+
         div.innerHTML = `
             <strong>Nome:</strong> ${pessoa.nome}<br>
             <strong>Dia:</strong> ${pessoa.data}<br>
             <strong>Hora:</strong> ${pessoa.hora}<br>
             <strong>Leitura:</strong> ${pessoa.leuTudo ? "Leu tudo" : "Não concluiu"}
         `;
+
         lista.appendChild(div);
 
         if (pessoa.leuTudo) {
             const parabens = document.createElement("div");
-            parabens.className = "frase-parabens";
-            parabens.innerText = " Parabéns meu nobre guerreiro! Você é muito estudioso e dedicado. Continue lendo!";
+            parabens.style.color = "green";
+            parabens.style.fontWeight = "bold";
+            parabens.innerText = "Parabéns! Você é muito dedicado.";
             lista.appendChild(parabens);
         }
     });
+
+    document.getElementById("mensagem-cadastro").innerText =
+        "Total de Pessoas Cadastradas: " + banco.length;
 }
 
-function apagarTodosCadastros() {
-    if (!confirm(traduzir("Deseja apagar todos os cadastros?"))) return;
+/* ================== APAGAR CADASTROS ================== */
+function apagarCadastros() {
 
-    backupCadastros = [...pessoasCadastradas];
-    pessoasCadastradas.length = 0;
+    if (!confirm("Deseja apagar todos os cadastros?")) return;
 
-    document.getElementById("lista-cadastros").innerHTML =
-        `<div class="frase-parabens">Você tem que criar um cadastro na capa inicial</div>`;
-}
+    backupBanco = [...banco];
 
-function recuperarCadastros() {
-    if (backupCadastros.length === 0) {
-        alert(traduzir("Nenhum cadastro para recuperar!"));
-        return;
-    }
+    banco = [];
+    localStorage.removeItem("bancoUsuarios");
 
-    pessoasCadastradas.length = 0;
-    backupCadastros.forEach(p => pessoasCadastradas.push(p));
     mostrarCadastros();
 }
 
-/* ================== CADASTROS COM LOCALSTORAGE ================== */
-function atualizarLista() {
-    const lista = document.getElementById('lista-cadastros');
-    lista.innerHTML = '';
-    const cadastros = JSON.parse(localStorage.getItem('cadastros')) || [];
+/* ================== RECUPERAR CADASTROS ================== */
+function recuperarCadastros() {
 
-    if (cadastros.length === 0) {
-        document.getElementById('mensagem-cadastro').innerHTML = `
-            Você tem que criar um cadastro na capa inicial.<br>
-            <button onclick="irCriarCadastro()" style="
-                background:#2e7d32;
-                color:#fff;
-                border:none;
-                border-radius:8px;
-                padding:6px 12px;
-                font-size:12px;
-                cursor:pointer;
-                margin-top:5px;
-            ">Ir criar um cadastro</button>
-        `;
-    } else {
-        cadastros.forEach((c, i) => {
-            const div = document.createElement('div');
-            div.textContent = `${i+1}. ${c}`;
-            lista.appendChild(div);
-        });
-        document.getElementById('mensagem-cadastro').innerHTML = '';
-    }
-}
-
-function apagarCadastros() {
-    const cadastros = JSON.parse(localStorage.getItem('cadastros')) || [];
-    if(cadastros.length > 0) cadastrosAntigos = [...cadastros];
-    localStorage.removeItem('cadastros');
-    atualizarLista();
-}
-
-function recuperarCadastrosAntigos() {
-    if (cadastrosAntigos.length === 0) {
-        alert("Nenhum cadastro antigo para recuperar!");
+    if (backupBanco.length === 0) {
+        alert("Nenhum cadastro para recuperar!");
         return;
     }
-    localStorage.setItem('cadastros', JSON.stringify(cadastrosAntigos));
-    atualizarLista();
-    document.getElementById('mensagem-cadastro').textContent = "Tá aqui seu cadastro antigo recuperado!";
+
+    banco = [...backupBanco];
+    localStorage.setItem("bancoUsuarios", JSON.stringify(banco));
+
+    mostrarCadastros();
 }
-
-function irCriarCadastro() {
-    alert("Você será levado à capa inicial para criar um novo cadastro.");
-    window.location.href = "capa-inicial.html"; // ajuste para sua página real
-}
-
-/* ================== IDIOMAS ================== */
-function abrirIdiomas() {
-    document.getElementById("quadro-idioma").classList.toggle("oculto");
-}
-
-function mudarIdioma(idioma) {
-    idiomaAtual = idioma;
-
-    document.querySelectorAll("[data-pt]").forEach(el => {
-        el.innerHTML = el.dataset[idioma];
+// ==========================
+// SALVAR NO MYSQL
+// ==========================
+async function salvarNoBanco(nome, senha) {
+    await fetch("http://localhost:3000/usuarios", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ nome, senha })
     });
+}
 
-    const frase = document.getElementById("frase-idioma");
-    const frases = {
-        pt: "Você voltou para o português. Continue lendo tudo que quiser, fique à vontade!",
-        en: "You have switched the site to English. Feel free to read everything!",
-        es: "Has cambiado el sitio al español. Puedes leer todo con tranquilidad."
-    };
-    frase.innerText = frases[idioma];
+// ==========================
+// CARREGAR USUÁRIOS
+// ==========================
+async function carregarUsuarios() {
+
+    const resposta = await fetch("http://localhost:3000/usuarios");
+    const usuarios = await resposta.json();
+
+    const lista = document.getElementById("lista-banco");
+    lista.innerHTML = "";
+
+    usuarios.forEach(user => {
+        lista.innerHTML += `
+            <div style="background:#f4f4f4; padding:10px; margin:8px 0; border-radius:8px;">
+                <strong>ID:</strong> ${user.id}<br>
+                <strong>Nome:</strong> ${user.nome}<br>
+                <strong>Data:</strong> ${new Date(user.data_login).toLocaleString()}
+            </div>
+        `;
+    });
 }
